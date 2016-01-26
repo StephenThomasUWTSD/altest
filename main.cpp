@@ -29,18 +29,6 @@ int main(int argc, char *argv[]) {
 
 
     //new
-    char*     alBuffer;             //data for the buffer
-    ALenum alFormatBuffer;    //buffer format
-    ALsizei   alFreqBuffer;       //frequency
-    ALsizei       alBufferLen;        //bit depth
-    ALboolean    alLoop;         //loop
-
-
-    //load the wave file //new
-    //http://www.gamedev.net/topic/394781-alutloadwavfile/
-    alutLoadWAVFile((ALbyte *)"my_music.wav",&alFormatBuffer,
-                    (void **) &alBuffer,
-                    &alBufferLen, &alFreqBuffer, &alLoop);
 
 
     ALsizei size, freq;
@@ -73,13 +61,13 @@ int main(int argc, char *argv[]) {
     std::cout<< AL_SOURCE_STATE << " .. " << source_state << "\n";
     // check for errors
     while (source_state == AL_PLAYING) {
-        std::cout<< "playing";
+        std::cout<< "playing\n";
             alGetSourcei(alSource, AL_SOURCE_STATE, &source_state);
             // check for errors
     }
 
     //release the data
-    alutUnloadWAV(alFormatBuffer, alBuffer, alBufferLen, alFreqBuffer);
+    alutUnloadWAV(format, data, size, freq);
 
     //old
     alDeleteSources(1, &source);
