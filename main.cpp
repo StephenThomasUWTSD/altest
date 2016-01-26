@@ -1,5 +1,6 @@
 #include <AL/al.h>
 #include <AL/alc.h>
+#include <AL/alut.h>
 #include <iostream>
 int main(int argc, char *argv[]) {
     ALuint source;
@@ -25,10 +26,40 @@ int main(int argc, char *argv[]) {
     alSource3f(source, AL_POSITION, 10, 0, 0);
     alSource3f(source, AL_VELOCITY, 0, 0, 0);
     alSourcei(source, AL_LOOPING, 1);
-    //load the wave file
+
+
+    //new
+    char*     alBuffer;             //data for the buffer
+    ALenum alFormatBuffer;    //buffer format
+    ALsizei   alFreqBuffer;       //frequency
+    long       alBufferLen;        //bit depth
+    ALboolean    alLoop;         //loop
+    unsigned int alSource;      //source
+    unsigned int alSampleSet;
+
+
+
+    //load the wave file //new
     alutLoadWAVFile("my_music.wav",&alFormatBuffer,
                     (void **) &alBuffer,(unsigned int *)
                     &alBufferLen, &alFreqBuffer, &alLoop);
+
+    //create a source
+    alGenSources(1, &alSource);
+
+    //create  buffer
+    alGenBuffers(1, &alSampleSet);
+
+    //put the data into our sampleset buffer
+    alBufferData(alSampleSet, alFormatBuffer, alBuffer, alBufferLen, alFreqBuffer);
+
+    //assign the buffer to this source
+    alSourcei(alSource, AL_BUFFER, alSampleSet);
+
+    //release the data
+    alutUnloadWAV(alFormatBuffer, alBuffer, alBufferLen, alFreqBuffer);
+
+    //old
     alDeleteSources(1, &source);
     alcDestroyContext(context);
     alcCloseDevice(device);
