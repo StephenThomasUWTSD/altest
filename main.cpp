@@ -25,7 +25,10 @@ int main(int argc, char *argv[]) {
     alSource3f(source, AL_POSITION, 10, 0, 0);
     alSource3f(source, AL_VELOCITY, 0, 0, 0);
     alSourcei(source, AL_LOOPING, 1);
-
+    //load the wave file
+    alutLoadWAVFile("my_music.wav",&alFormatBuffer,
+                    (void **) &alBuffer,(unsigned int *)
+                    &alBufferLen, &alFreqBuffer, &alLoop);
     alDeleteSources(1, &source);
     alcDestroyContext(context);
     alcCloseDevice(device);
