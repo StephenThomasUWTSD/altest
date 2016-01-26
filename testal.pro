@@ -6,3 +6,4 @@ CONFIG -= qt
 SOURCES += main.cpp
 
 LIBS += -lopenal
+LIBS += -lalut
