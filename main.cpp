@@ -34,9 +34,6 @@ int main(int argc, char *argv[]) {
     ALsizei   alFreqBuffer;       //frequency
     ALsizei       alBufferLen;        //bit depth
     ALboolean    alLoop;         //loop
-    unsigned int alSource;      //source
-    unsigned int alSampleSet;
-
 
 
     //load the wave file //new
@@ -45,6 +42,17 @@ int main(int argc, char *argv[]) {
                     (void **) &alBuffer,
                     &alBufferLen, &alFreqBuffer, &alLoop);
 
+
+    ALsizei size, freq;
+    ALenum format;
+    ALvoid *data;
+    ALboolean loop = AL_FALSE;
+    alutLoadWAVFile((ALbyte *)"my_music.wav", &format, &data, &size, &freq, &loop);
+
+
+    unsigned int alSource;      //source
+    unsigned int alSampleSet;
+
     //create a source
     alGenSources(1, &alSource);
 
@@ -52,10 +60,23 @@ int main(int argc, char *argv[]) {
     alGenBuffers(1, &alSampleSet);
 
     //put the data into our sampleset buffer
-    alBufferData(alSampleSet, alFormatBuffer, alBuffer, alBufferLen, alFreqBuffer);
+    alBufferData(alSampleSet, format, data, size, freq);
 
     //assign the buffer to this source
     alSourcei(alSource, AL_BUFFER, alSampleSet);
+
+    alSourcePlay(alSource);
+
+    ALint source_state;
+    alGetSourcei(alSource, AL_SOURCE_STATE, &source_state);
+
+    std::cout<< AL_SOURCE_STATE << " .. " << source_state << "\n";
+    // check for errors
+    while (source_state == AL_PLAYING) {
+        std::cout<< "playing";
+            alGetSourcei(alSource, AL_SOURCE_STATE, &source_state);
+            // check for errors
+    }
 
     //release the data
     alutUnloadWAV(alFormatBuffer, alBuffer, alBufferLen, alFreqBuffer);
