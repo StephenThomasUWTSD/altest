@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     char*     alBuffer;             //data for the buffer
     ALenum alFormatBuffer;    //buffer format
     ALsizei   alFreqBuffer;       //frequency
-    long       alBufferLen;        //bit depth
+    ALsizei       alBufferLen;        //bit depth
     ALboolean    alLoop;         //loop
     unsigned int alSource;      //source
     unsigned int alSampleSet;
@@ -40,8 +40,9 @@ int main(int argc, char *argv[]) {
 
 
     //load the wave file //new
-    alutLoadWAVFile("my_music.wav",&alFormatBuffer,
-                    (void **) &alBuffer,(unsigned int *)
+    //http://www.gamedev.net/topic/394781-alutloadwavfile/
+    alutLoadWAVFile((ALbyte *)"my_music.wav",&alFormatBuffer,
+                    (void **) &alBuffer,
                     &alBufferLen, &alFreqBuffer, &alLoop);
 
     //create a source
